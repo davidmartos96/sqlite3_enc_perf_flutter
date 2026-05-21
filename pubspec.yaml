@@ -30,16 +30,17 @@ flutter:
 
 hooks:
   user_defines:
+    # SQLite3MultipleCiphers
     # sqlite3:
-    #   source: sqlite3mc
+    #  source: sqlite3mc
 
-    # SQLCipher on Android
-    # sqlite3:
-    #   source: system
-    #   name: sqlcipher
-
-    # SQLCipher on iOS/macOS
+    # SQLCipher on Android (links with the .so from the binaries distributed by SQLCipher)
     sqlite3:
-      source: process
+      source: system
+      name: sqlcipher
+
+    # SQLCipher on iOS/macOS (links statically with the binaries distributed by SQLCipher)
+    # sqlite3:
+    #   source: process
 
     

@@ -28,7 +28,7 @@ Future<void> runPerf(String databasePath) async {
 
   final version = db.select("SELECT sqlite_version()");
   print(version);
-
+  
   await testPerf(db);
 }
 
