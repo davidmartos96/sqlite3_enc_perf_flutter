@@ -6,16 +6,23 @@ import PackageDescription
 let package = Package(
     name: "sqlcipher",
     platforms: [
-        .iOS("13.0")
+        .iOS("13.0"),
+        .macOS("10.15")
     ],
     products: [
         .library(name: "sqlcipher", targets: ["sqlcipher"])
     ],
-    dependencies: [],
+    dependencies: [
+        .package(url: "https://github.com/sqlcipher/SQLCipher.swift.git", from: "4.16.0"),
+        .package(name: "FlutterFramework", path: "../FlutterFramework"),
+    ],
     targets: [
         .target(
             name: "sqlcipher",
-            dependencies: [],
+            dependencies: [
+                .product(name: "FlutterFramework", package: "FlutterFramework"),
+                .product(name: "SQLCipher", package: "SQLCipher.swift")
+            ],
             resources: [
                 // If your plugin requires a privacy manifest, for example if it uses any required
                 // reason APIs, update the PrivacyInfo.xcprivacy file to describe your plugin's

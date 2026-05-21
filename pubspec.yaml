@@ -1,5 +1,6 @@
 name: sqlite3_perf_flutter
 description: "A new Flutter project."
+publish_to: none
 
 version: 1.0.0+1
 
@@ -11,15 +12,12 @@ dependencies:
     sdk: flutter
 
   cupertino_icons: ^1.0.8
-  # sqlite3: ^3.3.1
-  sqlite3:
-    git:
-      url: https://github.com/davidmartos96/sqlite3.dart
-      ref: sqlite3-sqlcipher-3.3.2
-      path: sqlite3
+  sqlite3: ^3.3.1
   uuid: ^4.5.3
   path_provider: ^2.1.5
   path: ^1.9.1
+  sqlcipher:
+    path: sqlcipher
 
 dev_dependencies:
   flutter_test:
@@ -34,7 +32,6 @@ hooks:
   user_defines:
     # sqlite3:
     #   source: sqlite3mc
-    #   # source: sqlcipher
 
     # SQLCipher on Android
     # sqlite3:
