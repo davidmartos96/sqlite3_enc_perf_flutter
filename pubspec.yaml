@@ -37,8 +37,12 @@ hooks:
     #   # source: sqlcipher
 
     # SQLCipher on Android
+    # sqlite3:
+    #   source: system
+    #   name: sqlcipher
+
+    # SQLCipher on iOS/macOS
     sqlite3:
-      source: system
-      name: sqlcipher
+      source: process
 
     
