@@ -14,15 +14,13 @@ const kTargetCol = "some_col"; // String column to lookup
 const kTargetTable = "items"; // Table name
 
 Future<void> runPerf(String databasePath) async {
-  setupSqliteOpenOverrides();
-
   await initializeDb(databasePath);
 
   final db = sqlite3.open(databasePath);
 
   db.execute("PRAGMA cipher = 'sqlcipher'");
   db.execute("PRAGMA legacy = 4");
-  
+
   db.execute("PRAGMA key = '$kDbKey'");
 
   await testPerf(db);
@@ -35,23 +33,35 @@ Future<void> initializeDb(String databasePath) async {
   }
 
   final db = sqlite3.open(databasePath);
-  
+
   db.execute("PRAGMA cipher = 'sqlcipher'");
   db.execute("PRAGMA legacy = 4");
-  
+
   db.execute("PRAGMA key = '$kDbKey'");
 
+  const kNumExtraCols = 5;
+
+  final extraCols = List.generate(
+    kNumExtraCols,
+    (i) => "col_${i + 1}",
+  ).toList();
+  final extraColsCreate = extraCols.map((col) => "$col TEXT").join(",\n");
   db.execute('''
     CREATE TABLE IF NOT EXISTS $kTargetTable (
       id INTEGER PRIMARY KEY AUTOINCREMENT,
-      $kTargetCol TEXT
+      $kTargetCol TEXT,
+      $extraColsCreate
     )
   ''');
 
-  final stmt = db.prepare("INSERT INTO $kTargetTable ($kTargetCol) VALUES (?)");
+  final questionMarks = List.filled(kNumExtraCols + 1, "?").join(", ");
+  final stmt = db.prepare(
+    "INSERT INTO $kTargetTable ($kTargetCol, ${extraCols.join(", ")}) VALUES ($questionMarks)",
+  );
   db.execute("BEGIN");
   for (var i = 0; i < kTotalItems; i++) {
-    stmt.execute([_uuid.v4()]);
+    final values = List<Object?>.generate(kNumExtraCols + 1, (_) => _uuid.v4());
+    stmt.execute(values);
   }
   db.execute("COMMIT");
 
@@ -80,20 +90,4 @@ Future<List<String>> getItemsToSearch(Database db) async {
 
   all.shuffle(r);
   return all.take(kNumItems).toList();
-}
-
-void setupSqliteOpenOverrides() {
-  // if (Platform.isMacOS) {
-  //   sqlite_open.open.overrideFor(
-  //     sqlite_open.OperatingSystem.macOS,
-  //     () => DynamicLibrary.open("./sqlite_libs/libsqlite3.dylib"),
-  //   );
-  // }
-
-  // if (Platform.isLinux) {
-  //   sqlite_open.open.overrideFor(
-  //     sqlite_open.OperatingSystem.linux,
-  //     () => DynamicLibrary.open("./sqlite_libs/libsqlite3.so"),
-  //   );
-  // }
 }

@@ -13,6 +13,8 @@ dependencies:
   cupertino_icons: ^1.0.8
   sqlite3: ^3.3.1
   uuid: ^4.5.3
+  path_provider: ^2.1.5
+  path: ^1.9.1
 
 dev_dependencies:
   flutter_test:
@@ -25,6 +27,13 @@ flutter:
 
 hooks:
   user_defines:
+    # sqlite3:
+    #   source: sqlite3mc
+    #   # source: sqlcipher
+
+    # SQLCipher on Android
     sqlite3:
-      source: sqlite3mc
-      # source: sqlcipher
+      source: system
+      name: sqlcipher
+
+    

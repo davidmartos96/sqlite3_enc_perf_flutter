@@ -42,3 +42,7 @@ android {
 flutter {
     source = "../.."
 }
+dependencies {
+    implementation("net.zetetic:sqlcipher-android:4.16.0@aar")
+    implementation("androidx.sqlite:sqlite:2.6.2")
+}
