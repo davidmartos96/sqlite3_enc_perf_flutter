@@ -18,10 +18,16 @@ Future<void> runPerf(String databasePath) async {
 
   final db = sqlite3.open(databasePath);
 
+  final cipher_version = db.select("PRAGMA cipher_version");
+  print(cipher_version);
+
   db.execute("PRAGMA cipher = 'sqlcipher'");
   db.execute("PRAGMA legacy = 4");
 
   db.execute("PRAGMA key = '$kDbKey'");
+
+  final version = db.select("SELECT sqlite_version()");
+  print(version);
 
   await testPerf(db);
 }
